@@ -12,7 +12,6 @@ export default function Homepage() {
 }
 
 function Banner() {
-    
     return (
         <div className="landing">
             <span id="top-left">
@@ -35,4 +34,3 @@ function Banner() {
         </div>
     )
 }
-
