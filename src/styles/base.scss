@@ -1,0 +1,205 @@
+@font-face {
+    font-family: foundersLight;
+    src: url("./foundersLight.otf");
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    height: 100vh;
+    padding: 10em;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 640px) {
+    .landing {
+        height: 360px;
+    }
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .landing {
+        height: 1366px;
+    }
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 1920px) {
+    .landing {
+        height: 1080px;
+    }
+}
+
+// Locomotive begins
+
+html.has-scroll-smooth {
+    overflow: hidden;
+}
+
+html.has-scroll-dragging {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.has-scroll-smooth body {
+    overflow: hidden;
+}
+
+.has-scroll-smooth [data-scroll-container] {
+    min-height: 100vh;
+}
+
+[data-scroll-direction="horizontal"] [data-scroll-container] {
+    height: 100vh;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+[data-scroll-direction="horizontal"] [data-scroll-section] {
+    display: inline-block;
+    vertical-align: top;
+    white-space: nowrap;
+    height: 100%;
+}
+
+.c-scrollbar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 11px;
+    height: 100%;
+    transform-origin: center right;
+    transition: transform 0.3s, opacity 0.3s;
+    opacity: 0;
+}
+
+.c-scrollbar:hover {
+    transform: scaleX(1.45);
+}
+
+.c-scrollbar:hover,
+.has-scroll-scrolling .c-scrollbar,
+.has-scroll-dragging .c-scrollbar {
+    opacity: 1;
+}
+
+[data-scroll-direction="horizontal"] .c-scrollbar {
+    width: 100%;
+    height: 10px;
+    top: auto;
+    bottom: 0;
+    transform: scaleY(1);
+}
+
+[data-scroll-direction="horizontal"] .c-scrollbar:hover {
+    transform: scaleY(1.3);
+}
+
+.c-scrollbar_thumb {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: black;
+    opacity: 0.5;
+    width: 7px;
+    border-radius: 10px;
+    margin: 2px;
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+.has-scroll-dragging .c-scrollbar_thumb {
+    cursor: -webkit-grabbing;
+    cursor: grabbing;
+}
+[data-scroll-direction="horizontal"] .c-scrollbar_thumb {
+    right: auto;
+    bottom: 0;
+}
+
+// Locomotive ends
+
+.landing {
+    position: absolute;
+    width: 100%;
+    height: 973px;
+    left: 0;
+    top: 0;
+    background-image: url("../../public/banner.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    transition-duration: 0.6s;
+
+    #top-left {
+        position: absolute;
+        left: 100px;
+        top: 70px;
+        font-family: foundersLight;
+        font-size: 40px;
+    }
+
+    #top-right {
+        position: absolute;
+        right: 100px;
+        top: 70px;
+        font-family: foundersLight;
+        font-size: 40px;
+        text-align: right;
+    }
+
+    #bottom-left {
+        position: absolute;
+        bottom: 50px;
+        left: 100px;
+        font-family: foundersLight;
+        font-size: 90px;
+    }
+
+    #bottom-right {
+        position: absolute;
+        bottom: 50px;
+        right: 60px;
+        z-index: 100;
+        padding: 40px;
+        border-radius: 80px;
+        transition-duration: 0.3s;
+
+        &:hover {
+            background-color: black;
+            transform: rotate(-45deg);
+        }
+    }
+}
+
+#middle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 500px;
+    margin: -55px 0 0 -250px;
+}
+
+.poster {
+    width: auto;
+    height: 100%;
+}
+
+.card {
+    font-family: foundersLight;
+    padding: 40px;
+    height: 400px;
+}
+
+#testing {
+    margin-top: 100%;
+    height: 100%;
+}

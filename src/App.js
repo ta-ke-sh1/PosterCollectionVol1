@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
+import Cursor from './components/cursor'
+import Homepage from './components/homepage'
+import Gallery from './components/gallery'
+import Locomotive from './components/locomotive'
+import './styles/root.scss'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+  const routes = useRoutes([
+    { path: '/', element: < Homepage /> },
+    { path: '/gallery', element: < Gallery /> },
+    { path: '/locomotive', element: < Locomotive /> },
+  ]);
+  return routes
 }
 
-export default App;
+const AppWrapper = () => {
+  return (
+    <Router>
+      <Cursor />
+      <App />
+    </Router>
+  );
+};
+
+export default AppWrapper;

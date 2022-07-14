@@ -1,0 +1,75 @@
+body {
+    margin: 0;
+    position: relative;
+    font-family: foundersLight;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Stack and slideshow */
+    --stack-margin: 10rem;
+    --slide-gap: 2vh;
+    --stack-width: 38vw;
+    --stack-item-height: 15vh;
+    --slide-width: 600px;
+    --slide-height: 800px;
+}
+
+.card {
+    opacity: 0.2;
+    width: 100%;
+    height: var(--stack-item-height);
+    background-size: cover;
+    background-position: top;
+    cursor: pointer;
+    will-change: width, height, transform, opacity;
+    transition: opacity 0.3s;
+
+    &:hover {
+        opacity: 0.6;
+    }
+}
+
+.stack {
+    margin: 0 auto;
+    width: var(--stack-width);
+    min-width: 300px;
+    grid-gap: 2vh;
+    display: grid;
+    place-items: center;
+}
+
+.slides {
+    margin-left: 40%;
+    transition-duration: 0.5s;
+    width: var(--slide-width);
+    position: relative;
+    background: var(--color-bg);
+
+    .stack {
+        width: 100%;
+        margin-left: auto;
+        margin-right: var(--slide-gap);
+    }
+
+    .card {
+        opacity: 0.2;
+        width: 100%;
+        height: var(--stack-item-height);
+        background-size: cover;
+        background-position: top;
+        cursor: pointer;
+        will-change: width, height, transform, opacity;
+        transition: opacity 0.3s;
+
+        &:hover {
+            opacity: 0.6;
+        }
+    }
+}
+
+.slides .display {
+    .card {
+        pointer-events: none;
+        opacity: 1;
+        height: var(--slide-height);
+    }
+}
