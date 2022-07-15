@@ -7,24 +7,24 @@ body {
     /* Stack and slideshow */
     --stack-margin: 10rem;
     --slide-gap: 2vh;
-    --stack-width: 38vw;
-    --stack-item-height: 15vh;
-    --slide-width: 600px;
-    --slide-height: 800px;
+    --stack-width: 30vh;
+    --stack-item-width: 30vw;
+    --stack-item-height: 12vh;
+    --slide-width: 60vh;
+    --slide-height: 80vh;
 }
 
-.card {
-    opacity: 0.2;
-    width: 100%;
-    height: var(--stack-item-height);
-    background-size: cover;
-    background-position: top;
-    will-change: width, height, transform, opacity;
-    transition: opacity 0.3s;
+#stack {
+    position: absolute;
+}
 
-    &:hover {
-        opacity: 0.6;
-    }
+.stack__item--current {
+    opacity: 1;
+}
+
+.oh {
+    position: relative;
+    overflow: hidden;
 }
 
 .stack {
@@ -37,11 +37,8 @@ body {
 }
 
 .slides {
-    margin-left: 40%;
-    transition-duration: 0.5s;
-    width: var(--slide-width);
+    width: 100%;
     position: relative;
-    background: var(--color-bg);
 
     .stack {
         width: 100%;
@@ -49,24 +46,33 @@ body {
         margin-right: var(--slide-gap);
     }
 
-    .card {
-        opacity: 0.2;
-        width: 100%;
-        height: var(--stack-item-height);
-        background-size: cover;
-        background-position: top;
-        will-change: width, height, transform, opacity;
-        transition: opacity 0.3s;
-
-        &:hover {
-            opacity: 0.6;
-        }
+    .stack-item {
+        height: 80vh;
+        width: 60vh;
+        transition-duration: 0.4s;
+        border-radius: 0px;
+        opacity: 1;
     }
 }
 
-.slides .display {
-    .card {
-        opacity: 1;
-        height: var(--slide-height);
+.stack-wrap {
+    width: 100%;
+    position: absolute;
+    top: 0;
+}
+
+.stack-item {
+    width: 100%;
+    height: var(--stack-item-height);
+    transition-duration: 0.4s;
+    background-size: cover;
+    background-position: top;
+    border-radius: 10px;
+    opacity: 0.2;
+    will-change: width, height, transform, opacity;
+
+    &:hover {
+        background-size: 100%;
+        opacity: 0.8;
     }
 }

@@ -1,88 +1,80 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import '../styles/base.scss'
 import '../styles/gallery.scss'
 import { gsap } from "gsap";
 import { Flip } from 'gsap/Flip';
 import { Observer } from 'gsap/Observer';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
+gsap.registerPlugin(ScrollToPlugin);
 
-const POSTER_COUNT = 19;
+const POSTER_COUNT = 20;
 let winsize = { width: window.innerWidth, height: window.innerHeight };
 window.addEventListener('resize', () => {
     winsize = { width: window.innerWidth, height: window.innerHeight };
 });
 
-export default class Gallery extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            isAnimating: false,
-            isOpen: false,
-            current: null,
-            item: null,
-            content: null,
-            items: [...document.querySelectorAll('.card')]
+export default function Gallery() {
+    const [isAnimating, updateAnimation] = useState(false);
+    const [isOpen, updateOpen] = useState(false);
+    const [index, updateIndex] = useState(-1);
+
+    const openSlideshow = (name, index) => {
+        let el = document.querySelector('.stack');
+        let items = document.querySelectorAll('.stack-item');
+        let slides = document.querySelector('.slides');
+
+        if (isAnimating || isOpen) {
+            return;
         }
-        this.onMouseDown = this.onMouseDown.bind(this);
-    }
 
-    componentDidMount() {
-        // console.log('componentDidMount');
-        console.log(document.documentElement.y);
-        console.log(window.scrollY);
-    }
-
-    openSlideshow = (name) => {
-        this.setState({
-            current: name,
-            isAnimating: true
-        })
+        updateAnimation(true);
+        updateIndex(index);
 
         const scrollY = window.scrollY;
+        document.body.classList.add('oh');
 
-        if (this.state.current !== null) { // Close previous open
-            document.getElementById(`poster-${this.state.current}`).className = 'card'
-        }
+        const item = document.getElementById(`poster-day-${index}`);
+        const state = Flip.getState(items, { props: 'opacity' });
+        slides.appendChild(el);
 
-        const stack = document.querySelectorAll(`#stack`)[0];
-        const state = Flip.getState(stack.children);
+        
+        const itemCenter = item.offsetTop + item.offsetHeight / 2;
 
-        const curr = document.querySelector(`#stack`)
-        curr.classList.toggle(`display`) // toggling class
-
-        const currentPoster = document.getElementById(`poster-${name}`);
-        const posterCenter = currentPoster.offsetTop + currentPoster.offsetHeight / 2;
-
-        gsap.set(curr, {
-            y: winsize.height / 2 - posterCenter + scrollY
+        gsap.set(el, {
+            y: winsize.height / 2 - itemCenter + scrollY
         })
+
+        console.log(index);
 
         Flip.from(state, { // Animating
             duration: 1,
-            ease: "expo",
+            ease: 'expo',
             onStart: () => document.documentElement.scrollTop = document.body.scrollTop = scrollY,
             onComplete: () => {
-                this.setState({
-                    isAnimating: false,
-                    isOpen: true,
-                })
+                updateAnimation(false);
+                updateOpen(true)
             },
             absoluteOnLeave: true,
         });
     }
 
-    closeSlideshow = () => {
-        console.log('Close!');
+    const closeSlideshow = () => {
+        // if (isAnimating || !isOpen) {
+        //     return;
+        // }
 
-        const stack = document.querySelectorAll(`#stack`)[0];
-        const state = Flip.getState(stack.children);
+        let el = document.querySelector('.stack');
+        let items = document.querySelectorAll('.stack-item');
+        let stackWrap = document.querySelector('.stack-wrap');
+        document.body.classList.remove('oh');
 
-        const curr = document.querySelector(`#stack`)
-        curr.classList.toggle(`display`) // toggling class
+        const state = Flip.getState(items, { props: 'opacity' });
+        stackWrap.appendChild(el);
 
-        gsap.set(curr, {
+        gsap.set(el, {
             y: 0
         })
 
@@ -90,79 +82,69 @@ export default class Gallery extends React.Component {
             duration: 1,
             ease: "expo",
             onComplete: () => {
-                this.setState({
-                    current: null,
-                    isAnimating: false,
-                    isOpen: false,
-                })
+                updateAnimation(false);
+                updateOpen(false);
+                updateIndex(-1)
             },
             absoluteOnLeave: true,
         });
     }
 
-    navigation = (direction) => {
+    const navigation = (direction) => {
 
     }
 
-    onMouseDown = (name) => {
+    const onMouseDown = (name, index) => {
         // Interfering
-        if (this.state.isAnimating) {
+        if (isAnimating) {
             return;
         }
-        else if (!this.state.isOpen) {
-            this.openSlideshow(name);
+        else if (isOpen) {
+            closeSlideshow();
         }
-        else {
-            this.closeSlideshow();
-        }
+        openSlideshow(name, index);
     }
 
-    render() {
-        let postersNumber = Array.from({ length: POSTER_COUNT }, (_, index) => index + 1);
-
-        return (
-            <div>
-                <div className="content">
-                    <ContentCollection />
-                </div>
-                <div className="slides">
-                    <div className="stack" id="stack">
-                        {
-                            postersNumber.map((number) =>
-                                <Poster
-                                    key={'poster' + number}
-                                    backgroundImage={`url(${process.env.PUBLIC_URL + '/posters/day' + number + '.jpg'})`}
-                                    name={'day-' + number}
-                                    content={'temporary'}
-                                    onMouseDown={(name) => this.onMouseDown(name)}
-                                />
-                            )}
-                    </div>
+    let postersNumber = Array.from({ length: POSTER_COUNT }, (_, index) => index + 1);
+    return (
+        <>
+            <div className="content">
+                <ContentCollection />
+            </div>
+            <button id="closeBtn" onClick={() => closeSlideshow()}>Close</button>
+            <div className="slides"></div>
+            <div className="stack-wrap">
+                <div className="stack">
+                    {
+                        postersNumber.map((number) =>
+                            <Poster
+                                key={'poster' + number}
+                                backgroundImage={`url(${process.env.PUBLIC_URL + '/posters/day' + number + '.jpg'})`}
+                                name={'day-' + number}
+                                index={number}
+                                content={'temporary'}
+                                onMouseDown={(name, index) => onMouseDown(name, index)}
+                            />
+                        )}
                 </div>
             </div>
-        )
-    }
+        </>
+    )
 }
 
-class Poster extends React.Component {
-    render() {
-        const {
-            name,
-            backgroundImage,
-            content,
-            onMouseDown
-        } = this.props
-        return (
-            <div
-                id={'poster-' + name}
-                style={{ backgroundImage: backgroundImage }}
-                className='card'
-                name={name}
-                content={content}
-                onMouseDown={() => onMouseDown(name)}>
-            </div>
-        )
-    }
+const Poster = (props) => {
+    return (
+        <div
+            id={'poster-' + props.name}
+            style={{ backgroundImage: props.backgroundImage }}
+            className='stack-item'
+            name={props.name}
+            index={props.index}
+            content={props.content}
+            onMouseDown={() => props.onMouseDown(props.name, props.index)}
+        >
+        </div>
+    )
 }
 
 class Content extends React.Component {
