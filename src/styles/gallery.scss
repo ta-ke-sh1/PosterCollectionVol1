@@ -1,3 +1,17 @@
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+
+    &:after{
+        box-sizing: border-box;
+    }
+
+    &:before{
+        box-sizing: border-box;
+    }
+}
+
 body {
     margin: 0;
     position: relative;
@@ -27,6 +41,11 @@ body {
     overflow: hidden;
 }
 
+.oh__inner {
+	display: inline-block;
+	will-change: transform;
+}
+
 .stack {
     margin: 0 auto;
     width: var(--stack-width);
@@ -49,7 +68,6 @@ body {
     .stack-item {
         height: 80vh;
         width: 60vh;
-        transition-duration: 0.4s;
         border-radius: 0px;
         opacity: 1;
     }
@@ -62,17 +80,37 @@ body {
 }
 
 .stack-item {
-    width: 100%;
+    width: 60vh;
     height: var(--stack-item-height);
-    transition-duration: 0.4s;
     background-size: cover;
     background-position: top;
-    border-radius: 10px;
     opacity: 0.2;
     will-change: width, height, transform, opacity;
 
     &:hover {
-        background-size: 100%;
         opacity: 0.8;
+    }
+}
+
+.stack__item--current {
+	opacity: 1;
+}
+
+.stack-item--empty{
+    pointer-events: none;
+	height: var(--stack-margin);
+}
+
+.nav{
+    position: fixed;
+    z-index: 100;
+
+    .btn{
+        padding: 30px;
+
+        &:hover{
+            background-color: red;
+            color: white;
+        }
     }
 }

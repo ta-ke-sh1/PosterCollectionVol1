@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../styles/base.scss'
 import '../styles/gallery.scss'
 import { gsap } from "gsap";
@@ -10,7 +10,7 @@ gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
 gsap.registerPlugin(ScrollToPlugin);
 
-const POSTER_COUNT = 20;
+const POSTER_COUNT = 22;
 let winsize = { width: window.innerWidth, height: window.innerHeight };
 window.addEventListener('resize', () => {
     winsize = { width: window.innerWidth, height: window.innerHeight };
@@ -19,13 +19,23 @@ window.addEventListener('resize', () => {
 export default function Gallery() {
     const [isAnimating, updateAnimation] = useState(false);
     const [isOpen, updateOpen] = useState(false);
+
+    // eslint-disable-next-line
     const [index, updateIndex] = useState(-1);
 
-    const openSlideshow = (name, index) => {
-        let el = document.querySelector('.stack');
-        let items = document.querySelectorAll('.stack-item');
-        let slides = document.querySelector('.slides');
+    const [el, setEl] = useState(null)
+    const [items, setItems] = useState(null)
+    const [slides, setSlides] = useState(null)
+    const [wrap, setWrap] = useState(null)
 
+    useEffect(() => {
+        setEl(document.querySelector('.stack'));
+        setItems(document.querySelectorAll('.stack-item'));
+        setSlides(document.querySelector('.slides'));
+        setWrap(document.querySelector('.stack-wrap'));
+    }, [])
+
+    const openSlideshow = (name, index) => {
         if (isAnimating || isOpen) {
             return;
         }
@@ -35,44 +45,39 @@ export default function Gallery() {
 
         const scrollY = window.scrollY;
         document.body.classList.add('oh');
-
-        const item = document.getElementById(`poster-day-${index}`);
+        
         const state = Flip.getState(items, { props: 'opacity' });
         slides.appendChild(el);
 
-        
+        const item = document.getElementById(`poster-day-${index}`);
         const itemCenter = item.offsetTop + item.offsetHeight / 2;
 
+        document.documentElement.scrollTop = document.body.scrollTop = 0;
         gsap.set(el, {
             y: winsize.height / 2 - itemCenter + scrollY
         })
-
-        console.log(index);
+        document.documentElement.scrollTop = document.body.scrollTop = 0;
 
         Flip.from(state, { // Animating
             duration: 1,
             ease: 'expo',
-            onStart: () => document.documentElement.scrollTop = document.body.scrollTop = scrollY,
             onComplete: () => {
                 updateAnimation(false);
                 updateOpen(true)
             },
+            onStart: () => document.documentElement.scrollTop = document.body.scrollTop = scrollY,
             absoluteOnLeave: true,
         });
     }
 
     const closeSlideshow = () => {
-        // if (isAnimating || !isOpen) {
-        //     return;
-        // }
+        if (isAnimating) {
+            return;
+        }
 
-        let el = document.querySelector('.stack');
-        let items = document.querySelectorAll('.stack-item');
-        let stackWrap = document.querySelector('.stack-wrap');
         document.body.classList.remove('oh');
-
         const state = Flip.getState(items, { props: 'opacity' });
-        stackWrap.appendChild(el);
+        wrap.appendChild(el);
 
         gsap.set(el, {
             y: 0
@@ -91,7 +96,20 @@ export default function Gallery() {
     }
 
     const navigation = (direction) => {
+        if (isAnimating) {
+            return;
+        }
+        updateAnimation(true);
 
+        gsap.timeline().to(el, {
+            duration: 1,
+            ease: 'expo',
+            y: direction === 'next' ? `-=${winsize.height / 2 + winsize.height * .32}` : `+=${winsize.height / 2 + winsize.height * .32}`,
+            onComplete: () => {
+                updateAnimation(false);
+            }
+        })
+        console.log(isAnimating);
     }
 
     const onMouseDown = (name, index) => {
@@ -111,10 +129,21 @@ export default function Gallery() {
             <div className="content">
                 <ContentCollection />
             </div>
-            <button id="closeBtn" onClick={() => closeSlideshow()}>Close</button>
+            <div className="nav">
+                <div className="btn" id="closeBtn" onMouseDown={() => closeSlideshow()}>
+                    Close
+                </div>
+                <div className="btn" onMouseDown={() => navigation('prev')}>
+                    Up
+                </div>
+                <div className="btn" onMouseDown={() => navigation('next')}>
+                    Down
+                </div>
+            </div>
             <div className="slides"></div>
             <div className="stack-wrap">
                 <div className="stack">
+                    <div className="stack-item stack-item--empty"></div>
                     {
                         postersNumber.map((number) =>
                             <Poster
@@ -126,6 +155,7 @@ export default function Gallery() {
                                 onMouseDown={(name, index) => onMouseDown(name, index)}
                             />
                         )}
+                    <div className="stack-item stack-item--empty"></div>
                 </div>
             </div>
         </>
