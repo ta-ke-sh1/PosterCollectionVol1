@@ -10,7 +10,7 @@ gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
 gsap.registerPlugin(ScrollToPlugin);
 
-const POSTER_COUNT = 22;
+const POSTER_COUNT = 23;
 let winsize = { width: window.innerWidth, height: window.innerHeight };
 window.addEventListener('resize', () => {
     winsize = { width: window.innerWidth, height: window.innerHeight };
@@ -29,6 +29,7 @@ export default function Gallery() {
     const [wrap, setWrap] = useState(null)
 
     useEffect(() => {
+        console.log(document.readyState);
         setEl(document.querySelector('.stack'));
         setItems(document.querySelectorAll('.stack-item'));
         setSlides(document.querySelector('.slides'));
@@ -45,7 +46,7 @@ export default function Gallery() {
 
         const scrollY = window.scrollY;
         document.body.classList.add('oh');
-        
+
         const state = Flip.getState(items, { props: 'opacity' });
         slides.appendChild(el);
 
@@ -109,7 +110,6 @@ export default function Gallery() {
                 updateAnimation(false);
             }
         })
-        console.log(isAnimating);
     }
 
     const onMouseDown = (name, index) => {
@@ -126,9 +126,9 @@ export default function Gallery() {
     let postersNumber = Array.from({ length: POSTER_COUNT }, (_, index) => index + 1);
     return (
         <>
-            <div className="content">
+            {/* <div className="content">
                 <ContentCollection />
-            </div>
+            </div> */}
             <div className="nav">
                 <div className="btn" id="closeBtn" onMouseDown={() => closeSlideshow()}>
                     Close
@@ -177,21 +177,22 @@ const Poster = (props) => {
     )
 }
 
-class Content extends React.Component {
-    render() {
-        const {
-            name,
-            info,
-            headings
-        } = this.props
-        return (
-            <div
-                id={'content-' + name}
-                info={info}
-                headings={headings}
-            ></div>
-        )
-    }
+const Content = (props) => {
+    return (
+        <div
+            id={'content-' + props.index}
+            info={props.info}
+            className='content-item'
+        >
+            <h2 className="content-item-title">
+                {props.headings}
+            </h2>
+            <div className="content-item-info">
+                <p className="oh">Day {props.index}</p>
+                <p className="oh">{props.info}</p>
+            </div>
+        </div>
+    )
 }
 
 class ContentCollection extends React.Component {
@@ -200,15 +201,32 @@ class ContentCollection extends React.Component {
         return (
             <>
                 {
-                    postersNumber.map((number) =>
+                    postersNumber.map((element) =>
                         <Content
-                            key={'content' + number}
-                            name={'day-' + number}
-                            info={'Information of day ' + number}
-                            headings={'Poster no.' + number}
+                            key={'content' + element}
+                            name={'day-' + element}
+                            info={'Information of day ' + element}
+                            headings={'Poster no.' + element}
                         />
                     )}
             </>
         )
     }
 }
+
+const posterContent = [
+    {
+        
+        name: 'Convergence',
+        info: '',
+    },
+    {
+        name: '123',
+    },
+    {
+        name: '123',
+    },
+    {
+        name: '123',
+    },
+]

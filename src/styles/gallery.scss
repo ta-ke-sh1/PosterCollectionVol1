@@ -87,9 +87,6 @@ body {
     opacity: 0.2;
     will-change: width, height, transform, opacity;
 
-    &:hover {
-        opacity: 0.8;
-    }
 }
 
 .stack__item--current {
@@ -107,10 +104,15 @@ body {
 
     .btn{
         padding: 30px;
+        opacity: 0;
 
         &:hover{
             background-color: red;
             color: white;
         }
+    }
+
+    .visible{
+        opacity: 1;
     }
 }
