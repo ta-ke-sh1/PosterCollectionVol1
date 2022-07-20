@@ -10,7 +10,7 @@ gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
 gsap.registerPlugin(ScrollToPlugin);
 
-const POSTER_COUNT = 23;
+const POSTER_COUNT = 25;
 let winsize = { width: window.innerWidth, height: window.innerHeight };
 window.addEventListener('resize', () => {
     winsize = { width: window.innerWidth, height: window.innerHeight };
