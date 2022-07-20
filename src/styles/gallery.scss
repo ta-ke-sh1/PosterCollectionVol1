@@ -1,13 +1,13 @@
 *,
 *::after,
 *::before {
-	box-sizing: border-box;
+    box-sizing: border-box;
 
-    &:after{
+    &:after {
         box-sizing: border-box;
     }
 
-    &:before{
+    &:before {
         box-sizing: border-box;
     }
 }
@@ -42,8 +42,8 @@ body {
 }
 
 .oh__inner {
-	display: inline-block;
-	will-change: transform;
+    display: inline-block;
+    will-change: transform;
 }
 
 .stack {
@@ -84,35 +84,53 @@ body {
     height: var(--stack-item-height);
     background-size: cover;
     background-position: top;
-    opacity: 0.2;
+    opacity: 0.4;
     will-change: width, height, transform, opacity;
 
+    &:hover {
+        opacity: 1;
+    }
 }
 
 .stack__item--current {
-	opacity: 1;
+    opacity: 1;
 }
 
-.stack-item--empty{
+.stack-item--empty {
     pointer-events: none;
-	height: var(--stack-margin);
+    height: var(--stack-margin);
 }
 
-.nav{
-    position: fixed;
-    z-index: 100;
+.nav-wrap {
+    grid-area: 1 / 1 / -1 / -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    z-index: 1000000000;
 
-    .btn{
-        padding: 30px;
-        opacity: 0;
+    .btn {
+        opacity: 1;
+        flex: none;
+        align-self: center;
+        height: calc((100vh - var(--slide-height) - var(--slide-gap) * 4) / 3);
 
         &:hover{
             background-color: red;
-            color: white;
         }
     }
 
-    .visible{
-        opacity: 1;
+    #prev{
+        position: sticky;
+        top: 0
     }
+
+    #next{
+        position: sticky;
+        bottom: 0;
+    }
+}
+
+.visible {
+    opacity: 1;
 }
