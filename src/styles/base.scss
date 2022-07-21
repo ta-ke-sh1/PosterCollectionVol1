@@ -3,6 +3,16 @@
     src: url("./foundersLight.otf");
 }
 
+@font-face {
+    font-family: foundersMedium;
+    src: url("./foundersMedium.otf");
+}
+
+@font-face {
+    font-family: editorialMedium;
+    src: url("./editorialMedium.otf");
+}
+
 * {
     box-sizing: border-box;
 }
@@ -11,6 +21,7 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4;
 }
 
 section {
