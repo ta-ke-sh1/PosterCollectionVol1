@@ -22,6 +22,14 @@ body {
     --slide-height: 80vh;
 }
 
+.frame {
+	padding: 3rem 5vw;
+	text-align: center;
+	position: absolute;
+    z-index: 1000;
+	width: 100%;
+}
+
 .unbutton {
     background: none;
     border: 0;

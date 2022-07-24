@@ -3,16 +3,16 @@ import "../styles/base.scss";
 import "../styles/gallery.scss";
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
+import { Observer } from 'gsap/Observer'
 
 gsap.registerPlugin(Flip);
+gsap.registerPlugin(Observer);
 
-const POSTER_COUNT = 26;
+const POSTER_COUNT = 29;
 let winsize = { width: window.innerWidth, height: window.innerHeight };
 window.addEventListener("resize", () => {
     winsize = { width: window.innerWidth, height: window.innerHeight };
 });
-
-
 
 export default function Gallery() {
     const [isAnimating, updateAnimation] = useState(false);
@@ -33,7 +33,6 @@ export default function Gallery() {
         setSlides(document.querySelector(".slides"));
         setWrap(document.querySelector(".stack-wrap"));
         setContent(document.querySelector('.content'));
-        
     }, []);
 
     const openSlideshow = (index) => {
@@ -91,6 +90,7 @@ export default function Gallery() {
         }
 
         updateAnimation(true);
+
         const contentText = new ContentItem(document.getElementById(`content-${index}`));
 
         document.body.classList.remove("oh");
@@ -148,6 +148,7 @@ export default function Gallery() {
     };
 
     const onMouseDown = (index) => {
+        console.log(isOpen);
         // Interfering
         if (isAnimating) {
             return;
@@ -163,34 +164,35 @@ export default function Gallery() {
     );
     return (
         <main>
+            <div className='frame'>
+                <div className="nav">
+                    <div
+                        className="btn"
+                        id="prev"
+                        onMouseDown={() => navigation("prev")}
+                    >
+                        Prev
+                    </div>
+                    <div
+                        className=" btn"
+                        id="next"
+                        onMouseDown={() => closeSlideshow()}
+                    >
+                        Close
+                    </div>
+                    <div
+                        className=" btn"
+                        id="next"
+                        onMouseDown={() => navigation("next")}
+                    >
+                        Next
+                    </div>
+                </div>
+            </div>
             <div className="content">
                 {postersNumber.map((number) => (
                     <Content key={"content" + number} index={number} />
                 ))}
-                <div className="nav-wrap">
-                    <button
-                        className="content__nav btn unbutton"
-                        id="prev"
-                        onClick={() => navigation("prev")}
-                    >
-                        <svg width="100" height="267" viewBox="0 0 100 267">
-                            <path d="M49.894 2.766v262.979"
-                                strokeLinecap="square" />
-                            <path fill="none"
-                                d="M99.75 76.596C73.902 76.596 52.62 43.07 49.895 0 47.168 43.07 25.886 76.596.036 76.596" />
-                        </svg>
-                    </button>
-                    <div
-                        className="content__nav btn unbutton"
-                        id="next"
-                        onClick={() => navigation("next")}
-                    >
-                        <svg width="100" height="267" viewBox="0 0 100 267">
-                            <path d="M49.894 2.766v262.979" strokeLinecap="square" />
-                            <path fill="none" d="M99.75 76.596C73.902 76.596 52.62 43.07 49.895 0 47.168 43.07 25.886 76.596.036 76.596" />
-                        </svg>
-                    </div>
-                </div>
             </div>
             <div className="slides"></div>
             <div className="stack-wrap">
@@ -341,7 +343,7 @@ const posterContent = [
         info: "",
     },
     {
-        name: "Morninng Coffee",
+        name: "Morning Coffee",
         info: "",
     },
     {
@@ -392,4 +394,16 @@ const posterContent = [
         name: "Gradient",
         info: "",
     },
+    {
+        name: 'Spacewalker',
+        info: ''
+    },
+    {
+        name: 'Lost in Translation',
+        info: ''
+    },
+    {
+        name: 'Break your limit',
+        info: ''
+    }
 ];

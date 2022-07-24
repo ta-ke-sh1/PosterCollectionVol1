@@ -1,0 +1,40 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.items {
+    padding: 10px;
+    width: calc(60*31 + 20);
+
+    .item {
+        display: inline-block;
+        position: relative;
+        width: 5vw;
+        height: 20vw;
+        min-width: 50px;
+        min-height: 450px;
+        background-size: cover;
+        background-position: top left;
+        border: 1px solid transparent;
+
+        &:hover{
+            border: 1px solid red;
+        }
+
+        &::before {
+            display: inline-block;
+            vertical-align: middle;
+            height: 100%;
+        }
+
+        &:first-child{
+            margin-left: -10px;
+        }
+    }
+
+    .blank{
+        opacity: 0;
+    }
+}
