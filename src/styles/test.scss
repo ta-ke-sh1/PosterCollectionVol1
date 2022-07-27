@@ -4,37 +4,55 @@ body {
     overflow: hidden;
 }
 
-.items {
-    padding: 10px;
-    width: calc(60*31 + 20);
+body::-webkit-scrollbar {
+    display: none;
+}
 
-    .item {
-        display: inline-block;
-        position: relative;
-        width: 5vw;
-        height: 20vw;
-        min-width: 50px;
-        min-height: 450px;
-        background-size: cover;
-        background-position: top left;
+.stack {
+    margin-top: 0px;
+    .items {
+        width: calc(60 * 31 + 20);
+        .item {
+            width: 5vw;
+        }
+    }
+}
+
+.slides {
+    margin-top: 0px;
+    .items {
+        width: calc(180 * 31);
+        .item {
+            width: 15vw;
+        }
+    }
+}
+
+.item {
+    display: inline-block;
+    position: relative;
+    height: 20vw;
+    min-width: 50px;
+    min-height: 450px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid red;
+
+    &:hover {
         border: 1px solid transparent;
-
-        &:hover{
-            border: 1px solid red;
-        }
-
-        &::before {
-            display: inline-block;
-            vertical-align: middle;
-            height: 100%;
-        }
-
-        &:first-child{
-            margin-left: -10px;
-        }
     }
 
-    .blank{
-        opacity: 0;
+    &::before {
+        display: inline-block;
+        vertical-align: middle;
+        height: 100%;
     }
+
+    &:first-child {
+        margin-left: -10px;
+    }
+}
+
+.blank {
+    opacity: 0;
 }

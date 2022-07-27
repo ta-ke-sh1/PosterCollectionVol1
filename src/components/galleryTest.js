@@ -1,7 +1,6 @@
-
 // eslint-disable-next-line
-import React, { useEffect, useRef, useState } from "react"
-import '../styles/test.scss'
+import React, { useEffect, useRef, useState } from "react";
+import "../styles/test.scss";
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import locomotiveScroll from "locomotive-scroll";
@@ -16,9 +15,12 @@ window.addEventListener("resize", () => {
     winsize = { width: window.innerWidth, height: window.innerHeight };
 });
 
+
 export default function Test() {
     const scrollRef = React.createRef();
     const [images, setImages] = useState([]);
+    const [isAnimating, setAnimating] = useState(false);
+    const [isOpen, setOpen] = useState(false);
     let postersNumber = Array.from(
         { length: POSTER_COUNT },
         (_, index) => index + 1
@@ -27,53 +29,114 @@ export default function Test() {
     useEffect(() => {
         const scroll = new locomotiveScroll({
             el: scrollRef.current,
-            direction: 'horizontal',
+            direction: "horizontal",
             smooth: true,
             lerp: 0.05,
             tablet: {
-                smooth: true
+                smooth: true,
             },
             smartphone: {
-                smooth: true
-            }
+                smooth: true,
+            },
         });
-        setImages(document.querySelectorAll('.item'));
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        setImages(document.querySelectorAll(".item"));
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const selectImage = (number) => {
         console.log(number);
-    }
+    };
+
+    const openImage = (index) => {
+        if (isAnimating || isOpen) return;
+        setAnimating(true);
+        setOpen(true);
+
+        const scrollY = window.scrollY;
+        document.body.classList.add("oh");
+        const slides = document.querySelector(".slides");
+        const el = document.querySelector(".items");
+        const state = Flip.getState(images, { props: "opacity" });
+        slides.appendChild(el);
+
+        // const item = document.getElementById(`poster-day-${index}`);
+        // const itemCenter = item.offsetTop + item.offsetHeight / 2;
+        // //
+
+        // document.documentElement.scrollTop = document.body.scrollTop = 0;
+        // gsap.set(el, {
+        //     y: winsize.height / 2 - itemCenter + scrollY,
+        // });
+        // document.documentElement.scrollTop = document.body.scrollTop = 0;
+
+        Flip.from(state, {
+            duration: 1.5,
+            ease: "expo",
+            onComplete: () => {
+                setAnimating(false);
+                setOpen(true);
+            },
+            onStart: () =>
+                (document.documentElement.scrollTop = document.body.scrollTop =
+                    scrollY),
+            absoluteOnLeave: true,
+        });
+    };
+
+    const closeImage = () => {
+        if (isAnimating || !isOpen) return;
+        const stack = document.querySelector(".stack");
+        const el = document.querySelector(".items");
+        const state = Flip.getState(images, { props: "opacity" });
+        stack.appendChild(el);
+
+        Flip.from(state, {
+            duration: 1.5,
+            ease: "expo",
+            onComplete: () => {
+                setAnimating(false);
+                setOpen(false);
+            },
+        });
+    };
+
+    const handleClick = (index) => {
+        if (isAnimating) return;
+        if (!isOpen) openImage(index);
+        else closeImage();
+    };
 
     return (
         <main>
             <div className="ui"></div>
             <div className="wrapper">
-                <div className="container" data-scroll-container>
-                    <div className='items' data-scroll-section ref={scrollRef}>
+                <div className="slides"></div>
+                <div className="stack" data-scroll-container>
+                    <div className="items" data-scroll-section ref={scrollRef}>
                         <div
                             className="item blank"
                             data-scroll
-                            data-scroll-speed="1">
-                        </div>
+                            data-scroll-speed="1"
+                        ></div>
                         {postersNumber.map((number) => (
                             <Poster
-                                backgroundImage={`url(${process.env.PUBLIC_URL +
+                                backgroundImage={`url(${
+                                    process.env.PUBLIC_URL +
                                     "/posters/day" +
                                     number +
                                     ".jpg"
-                                    })`}
+                                })`}
                                 name={"day-" + number}
                                 index={number}
                                 content={"temporary"}
                                 key={"poster" + number}
-                                onMouseDown={() => selectImage(number)}
+                                onMouseDown={() => handleClick(number)}
                             />
                         ))}
                         <div
                             className="item blank"
                             data-scroll
-                            data-scroll-speed="1">
-                        </div>
+                            data-scroll-speed="1"
+                        ></div>
                     </div>
                 </div>
             </div>
@@ -99,29 +162,23 @@ const Poster = (props) => {
 
 // eslint-disable-next-line
 const Content = (props) => {
-    let name = posterContent[props.index - 1].name.split(' ');
+    let name = posterContent[props.index - 1].name.split(" ");
     let info = posterContent[props.index - 1].info;
     return (
         <div id={"content-" + props.index} className="content-item">
             <h2 className="content-item-title">
-                {name.map((word) =>
+                {name.map((word) => (
                     <span className="oh" key={word}>
-                        <span className="oh__inner">
-                            {word}
-                        </span>
+                        <span className="oh__inner">{word}</span>
                     </span>
-                )}
+                ))}
             </h2>
             <div className="content-item-info">
-                <p className="oh" >
-                    <strong className="oh__inner">
-                        Day {props.index}
-                    </strong>
+                <p className="oh">
+                    <strong className="oh__inner">Day {props.index}</strong>
                 </p>
                 <p className="oh">
-                    <span className="oh__inner">
-                        {info}
-                    </span>
+                    <span className="oh__inner">{info}</span>
                 </p>
             </div>
         </div>
@@ -234,15 +291,15 @@ const posterContent = [
         info: "",
     },
     {
-        name: 'Spacewalker',
-        info: ''
+        name: "Spacewalker",
+        info: "",
     },
     {
-        name: 'Lost in Translation',
-        info: ''
+        name: "Lost in Translation",
+        info: "",
     },
     {
-        name: 'Break your limit',
-        info: ''
-    }
+        name: "Break your limit",
+        info: "",
+    },
 ];
