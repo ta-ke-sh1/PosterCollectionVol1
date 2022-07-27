@@ -8,7 +8,7 @@ import locomotiveScroll from "locomotive-scroll";
 
 gsap.registerPlugin(Flip);
 
-const POSTER_COUNT = 29;
+const POSTER_COUNT = 30;
 
 // eslint-disable-next-line
 let winsize = { width: window.innerWidth, height: window.innerHeight };
@@ -243,6 +243,10 @@ const posterContent = [
     },
     {
         name: 'Break your limit',
+        info: ''
+    },
+    {
+        name: 'El Paradiso',
         info: ''
     }
 ];
